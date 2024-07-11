@@ -1,0 +1,12 @@
+const express = require('express');
+const app = express();
+const PORT = 3000; // Puerto en el que deseas que Express escuche
+
+// Rutas, middlewares y otras configuraciones de Express aquí...
+
+app.listen(PORT, () => {
+  console.log(`Servidor Express escuchando en el puerto ${PORT}`);
+});
+
+
+"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImxhZXpyYSIsImlhdCI6MTcyMDY1ODIyNiwiZXhwIjoxNzIwNjYxODI2fQ.ZZgO_JpMXFzYpgxju53ZM9ue-gg1SQe1woTHLfJY45E"

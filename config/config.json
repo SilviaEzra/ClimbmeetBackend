@@ -1,0 +1,24 @@
+{
+  "development": {
+    "username": "root",
+    "password": "admin123",
+    "database": "sprint9",
+    "host": "127.0.0.1",
+    "port": "3308",
+    "dialect": "mysql"
+  },
+  "test": {
+    "username": "root",
+    "password": "admin123",
+    "database": "sprint9_test",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  },
+  "production": {
+    "username": "root",
+    "password": "admin123",
+    "database": "sprint9_prod",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  }
+}
