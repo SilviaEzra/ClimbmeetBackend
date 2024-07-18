@@ -3,6 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+// src/models/user.ts
 const sequelize_1 = require("sequelize");
 const connections_1 = __importDefault(require("../db/connections"));
 class User extends sequelize_1.Model {
@@ -14,51 +15,49 @@ User.init({
         primaryKey: true,
     },
     username: {
-        type: sequelize_1.DataTypes.STRING,
+        type: new sequelize_1.DataTypes.STRING(128),
         allowNull: false,
-        unique: true,
+        unique: true, // Asegura que el username sea único
     },
     password: {
-        type: sequelize_1.DataTypes.STRING,
+        type: new sequelize_1.DataTypes.STRING(128),
         allowNull: false,
     },
     firstName: {
-        type: sequelize_1.DataTypes.STRING,
-        allowNull: false,
-        defaultValue: 'Unknown',
+        type: new sequelize_1.DataTypes.STRING(128),
+        allowNull: true,
     },
     lastName: {
-        type: sequelize_1.DataTypes.STRING,
-        allowNull: false,
-        defaultValue: 'Unknown',
+        type: new sequelize_1.DataTypes.STRING(128),
+        allowNull: true,
     },
     email: {
-        type: sequelize_1.DataTypes.STRING,
-        allowNull: false,
-        defaultValue: 'unknown@example.com',
+        type: new sequelize_1.DataTypes.STRING(128),
+        allowNull: true,
+        unique: true, // Asegura que el email sea único
     },
     address: {
-        type: sequelize_1.DataTypes.STRING,
-        allowNull: false,
-        defaultValue: 'Unknown',
+        type: new sequelize_1.DataTypes.STRING(128),
+        allowNull: true,
     },
     gender: {
-        type: sequelize_1.DataTypes.STRING,
-        allowNull: false,
-        defaultValue: 'Unknown',
+        type: new sequelize_1.DataTypes.STRING(128),
+        allowNull: true,
     },
     climbingType: {
-        type: sequelize_1.DataTypes.STRING,
-        allowNull: false,
-        defaultValue: 'Unknown',
+        type: new sequelize_1.DataTypes.STRING(128),
+        allowNull: true,
     },
     climbingLevel: {
-        type: sequelize_1.DataTypes.STRING,
-        allowNull: false,
-        defaultValue: 'Unknown',
+        type: new sequelize_1.DataTypes.STRING(128),
+        allowNull: true,
+    },
+    profileImage: {
+        type: new sequelize_1.DataTypes.STRING(128),
+        allowNull: true,
     },
 }, {
     sequelize: connections_1.default,
-    modelName: 'User',
+    tableName: 'users',
 });
 exports.default = User;

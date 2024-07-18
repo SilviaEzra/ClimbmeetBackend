@@ -1,11 +1,9 @@
-// src/routes/locationRoutes.ts
 import { Router } from 'express';
-import { getLocations, createLocation, deleteLocation } from '../controllers/location';
+import { addLocation, getLocations } from '../controllers/location';
 
 const router = Router();
 
-router.get('/locations', getLocations);
-router.post('/locations', createLocation);
-router.delete('/locations/:id', deleteLocation);
+router.post('/add', addLocation); // Ruta para agregar una ubicación
+router.get('/all', getLocations); // Ruta para obtener todas las ubicaciones
 
 export default router;

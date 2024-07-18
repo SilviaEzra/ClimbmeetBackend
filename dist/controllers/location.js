@@ -12,28 +12,28 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteLocation = exports.createLocation = exports.getLocations = void 0;
+exports.getLocations = exports.addLocation = void 0;
 const location_1 = __importDefault(require("../models/location"));
+const addLocation = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { name, latitude, longitude, type } = req.body;
+        const newLocation = yield location_1.default.create({ name, latitude, longitude, type });
+        res.status(201).json(newLocation);
+    }
+    catch (error) {
+        console.error('Error adding location:', error);
+        res.status(500).json({ message: 'Error adding location', error });
+    }
+});
+exports.addLocation = addLocation;
 const getLocations = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const locations = yield location_1.default.findAll();
-    res.json(locations);
+    try {
+        const locations = yield location_1.default.findAll();
+        res.status(200).json(locations);
+    }
+    catch (error) {
+        console.error('Error getting locations:', error);
+        res.status(500).json({ message: 'Error getting locations', error });
+    }
 });
 exports.getLocations = getLocations;
-const createLocation = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { name, latitude, longitude } = req.body;
-    const newLocation = yield location_1.default.create({ name, latitude, longitude });
-    res.json(newLocation);
-});
-exports.createLocation = createLocation;
-const deleteLocation = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { id } = req.params;
-    const location = yield location_1.default.findByPk(id);
-    if (location) {
-        yield location.destroy();
-        res.json({ message: 'Location deleted' });
-    }
-    else {
-        res.status(404).json({ message: 'Location not found' });
-    }
-});
-exports.deleteLocation = deleteLocation;

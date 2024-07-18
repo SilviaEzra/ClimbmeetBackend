@@ -19,7 +19,7 @@ const authenticateJWT = (req, res, next) => __awaiter(void 0, void 0, void 0, fu
     const token = (_a = req.header('Authorization')) === null || _a === void 0 ? void 0 : _a.split(' ')[1];
     if (token) {
         try {
-            const decoded = jsonwebtoken_1.default.verify(token, process.env.SECRET_KEY || 'default_secret_key');
+            const decoded = jsonwebtoken_1.default.verify(token, process.env.SECRET_KEY || 'pepito123');
             const user = yield user_1.default.findOne({ where: { id: decoded.id } });
             if (user) {
                 req.user = user;
@@ -30,6 +30,7 @@ const authenticateJWT = (req, res, next) => __awaiter(void 0, void 0, void 0, fu
             }
         }
         catch (error) {
+            console.error('Error al verificar el token:', error);
             res.status(401).send('Token no válido');
         }
     }

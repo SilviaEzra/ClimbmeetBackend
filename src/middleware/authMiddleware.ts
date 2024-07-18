@@ -1,3 +1,4 @@
+// middleware/authMiddleware.ts
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import User from '../models/user';
@@ -7,8 +8,9 @@ const authenticateJWT = async (req: Request, res: Response, next: NextFunction) 
 
   if (token) {
     try {
-      const decoded: any = jwt.verify(token, process.env.SECRET_KEY || 'default_secret_key');
+      const decoded: any = jwt.verify(token, process.env.SECRET_KEY || 'pepito123');
       const user = await User.findOne({ where: { id: decoded.id } });
+
       if (user) {
         req.user = user;
         next();
@@ -16,6 +18,7 @@ const authenticateJWT = async (req: Request, res: Response, next: NextFunction) 
         res.status(401).send('Usuario no encontrado');
       }
     } catch (error) {
+      console.error('Error al verificar el token:', error);
       res.status(401).send('Token no válido');
     }
   } else {

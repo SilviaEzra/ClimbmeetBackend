@@ -6,9 +6,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // src/routes/events.ts
 const express_1 = require("express");
 const events_1 = require("../controllers/events");
-const authMiddleware_1 = __importDefault(require("../middleware/authMiddleware"));
+const upload_1 = __importDefault(require("../middleware/upload"));
 const router = (0, express_1.Router)();
-router.get('/', authMiddleware_1.default, events_1.getEvents);
-router.post('/', authMiddleware_1.default, events_1.createEvent);
-router.delete('/:id', authMiddleware_1.default, events_1.deleteEvent);
+router.post('/', upload_1.default.single('image'), events_1.createEvent);
+router.get('/', events_1.getEvents);
+router.delete('/:id', events_1.deleteEvent);
+router.get('/:id', events_1.getEventById);
+router.put('/:id', upload_1.default.single('image'), events_1.updateEvent);
 exports.default = router;

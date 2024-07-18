@@ -25,6 +25,10 @@ Location.init({
         type: sequelize_1.DataTypes.FLOAT,
         allowNull: false,
     },
+    type: {
+        type: sequelize_1.DataTypes.STRING,
+        allowNull: false,
+    }
 }, {
     sequelize: connections_1.default,
     modelName: 'Location',

@@ -12,18 +12,19 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-// src/index.ts
 const connections_1 = __importDefault(require("./db/connections"));
 const server_1 = require("./models/server");
-const startServer = () => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        yield connections_1.default.sync({ force: true });
-        console.log('Database synchronized');
-        const server = new server_1.Server();
-        server.listen();
-    }
-    catch (error) {
-        console.error('Unable to synchronize the database:', error);
-    }
-});
-startServer();
+const server = new server_1.Server();
+function main() {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            yield connections_1.default.sync(); // Sin `force: true`
+            console.log('Database synchronized');
+            server.listen();
+        }
+        catch (error) {
+            console.error('Unable to synchronize the database:', error);
+        }
+    });
+}
+main();

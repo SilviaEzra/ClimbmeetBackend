@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteEvent = exports.createEvent = exports.getEvents = void 0;
+exports.updateEvent = exports.getEventById = exports.deleteEvent = exports.createEvent = exports.getEvents = void 0;
 const events_1 = __importDefault(require("../models/events"));
 const getEvents = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -26,8 +26,10 @@ const getEvents = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 });
 exports.getEvents = getEvents;
 const createEvent = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { title, description, location, address, date } = req.body;
+    const image = req.file ? req.file.path : '';
     try {
-        const event = yield events_1.default.create(req.body);
+        const event = yield events_1.default.create({ title, description, location, address, date, image });
         res.status(201).json(event);
     }
     catch (error) {
@@ -48,3 +50,41 @@ const deleteEvent = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     }
 });
 exports.deleteEvent = deleteEvent;
+const getEventById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { id } = req.params;
+        const event = yield events_1.default.findByPk(id);
+        if (!event) {
+            return res.status(404).json({ error: 'Event not found' });
+        }
+        res.json(event);
+    }
+    catch (error) {
+        console.error('Error fetching event:', error);
+        res.status(500).send('Error fetching event');
+    }
+});
+exports.getEventById = getEventById;
+const updateEvent = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    const { title, description, location, address, date } = req.body;
+    const image = req.file ? req.file.path : '';
+    console.log('Update Event - ID:', id);
+    console.log('Update Event - Body:', req.body);
+    console.log('Update Event - File:', req.file);
+    try {
+        const event = yield events_1.default.findByPk(id);
+        if (!event) {
+            console.log('Event not found');
+            return res.status(404).json({ error: 'Event not found' });
+        }
+        yield event.update({ title, description, location, address, date, image });
+        console.log('Event updated:', event);
+        res.json(event);
+    }
+    catch (error) {
+        console.error('Error updating event:', error);
+        res.status(500).send('Error updating event');
+    }
+});
+exports.updateEvent = updateEvent;

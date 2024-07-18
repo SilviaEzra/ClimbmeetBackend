@@ -1,10 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-// src/routes/locationRoutes.ts
 const express_1 = require("express");
 const location_1 = require("../controllers/location");
 const router = (0, express_1.Router)();
-router.get('/locations', location_1.getLocations);
-router.post('/locations', location_1.createLocation);
-router.delete('/locations/:id', location_1.deleteLocation);
+router.post('/add', location_1.addLocation); // Ruta para agregar una ubicación
+router.get('/all', location_1.getLocations); // Ruta para obtener todas las ubicaciones
 exports.default = router;

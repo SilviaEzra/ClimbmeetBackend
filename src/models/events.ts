@@ -1,4 +1,4 @@
-// src/models/event.ts
+// models/events.ts
 import { Model, DataTypes } from 'sequelize';
 import sequelize from '../db/connections';
 
@@ -10,7 +10,6 @@ class AppEvent extends Model {
   public address!: string;
   public date!: Date;
   public image!: string;
-  public userId!: number; // Si tienes una relación con el usuario
 }
 
 AppEvent.init(
@@ -42,10 +41,6 @@ AppEvent.init(
     },
     image: {
       type: DataTypes.STRING,
-      allowNull: false,
-    },
-    userId: {
-      type: DataTypes.INTEGER.UNSIGNED,
       allowNull: false,
     },
   },

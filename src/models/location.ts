@@ -6,6 +6,7 @@ class Location extends Model {
   public name!: string;
   public latitude!: number;
   public longitude!: number;
+  public type!: string; // Añadido el campo 'type'
 }
 
 Location.init({
@@ -26,6 +27,10 @@ Location.init({
     type: DataTypes.FLOAT,
     allowNull: false,
   },
+  type: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  }
 }, {
   sequelize: db,
   modelName: 'Location',

@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-// src/models/event.ts
+// models/events.ts
 const sequelize_1 = require("sequelize");
 const connections_1 = __importDefault(require("../db/connections"));
 class AppEvent extends sequelize_1.Model {
@@ -36,10 +36,6 @@ AppEvent.init({
     },
     image: {
         type: sequelize_1.DataTypes.STRING,
-        allowNull: false,
-    },
-    userId: {
-        type: sequelize_1.DataTypes.INTEGER.UNSIGNED,
         allowNull: false,
     },
 }, {

@@ -2,7 +2,7 @@ import { Sequelize } from 'sequelize';
 
 const sequelize = new Sequelize('sprint9', 'root', 'admin123', {
   host: 'localhost',
-  port: 3308, // Asegúrate de que este puerto es el correcto
+  port: 3308, // Cambia el puerto aquí si es necesario
   dialect: 'mysql',
 });
 

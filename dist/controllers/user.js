@@ -18,22 +18,19 @@ const user_1 = __importDefault(require("../models/user"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const newUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { username, password, firstName, lastName, email, address, gender, climbingType, climbingLevel } = req.body;
-    console.log('Datos de entrada para registro:', req.body);
     if (!username || !password) {
-        return res.status(400).json({
-            msg: 'Faltan parámetros en la solicitud'
-        });
+        return res.status(400).json({ msg: 'Faltan parámetros en la solicitud' });
     }
     try {
-        const user = yield user_1.default.findOne({ where: { username: username } });
-        if (user) {
-            console.log('Usuario encontrado:', user);
-            return res.status(400).json({
-                msg: 'Ya existe un usuario con el nombre ' + username
-            });
+        const existingUser = yield user_1.default.findOne({ where: { username } });
+        if (existingUser) {
+            return res.status(400).json({ msg: 'Username already exists' });
+        }
+        const existingEmail = yield user_1.default.findOne({ where: { email } });
+        if (existingEmail) {
+            return res.status(400).json({ msg: 'Email already exists' });
         }
         const hashedPassword = yield bcrypt_1.default.hash(password, 10);
-        console.log('Contraseña hasheada:', hashedPassword);
         yield user_1.default.create({
             username,
             password: hashedPassword,
@@ -45,16 +42,11 @@ const newUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             climbingType,
             climbingLevel
         });
-        console.log('Usuario creado correctamente');
-        res.json({
-            msg: 'Usuario ' + username + ' creado correctamente',
-        });
+        res.json({ msg: 'Usuario ' + username + ' creado correctamente' });
     }
     catch (error) {
         console.error('Error al crear usuario:', error);
-        res.status(400).json({
-            msg: 'Ups, ha habido un error al crear el usuario'
-        });
+        res.status(400).json({ msg: 'Ups, ha habido un error al crear el usuario' });
     }
 });
 exports.newUser = newUser;
@@ -79,7 +71,7 @@ const loginUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
                 msg: 'Password Incorrecto'
             });
         }
-        const token = jsonwebtoken_1.default.sign({ id: user.id }, process.env.SECRET_KEY || 'pepito123', { expiresIn: '1h' });
+        const token = jsonwebtoken_1.default.sign({ id: user.id, username: username }, process.env.SECRET_KEY || 'pepito123', { expiresIn: '1h' });
         res.json({ token });
     }
     catch (error) {
@@ -92,25 +84,22 @@ const loginUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 exports.loginUser = loginUser;
 const updateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { username, firstName, lastName, email, address, gender, climbingType, climbingLevel } = req.body;
-    console.log('Datos de entrada para actualización:', req.body);
+    const profileImage = req.file ? req.file.path : undefined;
     try {
-        const user = yield user_1.default.findOne({ where: { username: username } });
+        const user = yield user_1.default.findOne({ where: { username } });
         if (!user) {
-            return res.status(400).json({
-                msg: 'No existe un usuario con el nombre ' + username
-            });
+            return res.status(400).json({ msg: 'No existe un usuario con el nombre ' + username });
         }
-        yield user_1.default.update({ firstName, lastName, email, address, gender, climbingType, climbingLevel }, { where: { username: username } });
-        console.log('Usuario actualizado correctamente');
-        res.json({
-            msg: 'Usuario ' + username + ' actualizado correctamente',
-        });
+        const updateData = { firstName, lastName, email, address, gender, climbingType, climbingLevel };
+        if (profileImage) {
+            updateData.profileImage = profileImage;
+        }
+        yield user_1.default.update(updateData, { where: { username: username } });
+        res.json({ msg: 'Usuario ' + username + ' actualizado correctamente' });
     }
     catch (error) {
         console.error('Error al actualizar usuario:', error);
-        res.status(400).json({
-            msg: 'Ups, ha habido un error al actualizar el usuario'
-        });
+        res.status(400).json({ msg: 'Ups, ha habido un error al actualizar el usuario' });
     }
 });
 exports.updateUser = updateUser;
@@ -118,14 +107,12 @@ const getUserProfile = (req, res) => __awaiter(void 0, void 0, void 0, function*
     const authHeader = req.headers.authorization;
     const token = authHeader === null || authHeader === void 0 ? void 0 : authHeader.split(' ')[1];
     if (!token) {
-        console.error('No token provided');
         return res.status(401).json({ msg: 'No token provided' });
     }
     try {
         const decoded = jsonwebtoken_1.default.verify(token, process.env.SECRET_KEY || 'pepito123');
         const user = yield user_1.default.findOne({ where: { id: decoded.id } });
         if (!user) {
-            console.error('User not found');
             return res.status(404).json({ msg: 'User not found' });
         }
         res.json(user);
